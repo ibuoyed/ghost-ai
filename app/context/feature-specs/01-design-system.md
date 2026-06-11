@@ -8,7 +8,7 @@ Add these shadcn components:
 
 - Button
 - Card
-- Dialogue
+- Dialog
 - Input
 - Tabs
 - Textarea
