@@ -37,7 +37,7 @@ export default function RootLayout({
           colorPrimary: "var(--accent-primary)",
           colorDanger: "var(--state-error)",
           colorBorder: "var(--border-default)",
-          colorNeutral: "white",
+          colorNeutral: "var(--text-secondary)",
           fontFamily: "inherit",
         },
       }}
