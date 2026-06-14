@@ -24,7 +24,7 @@ Clicking `New Project` should open the Create Project dialog.
 
 
 ### Rename project
-- Prefer project name input
+- Prefilled project name input
 - Current project name shown in the description
 - Input autofocuses
 - Enter submits

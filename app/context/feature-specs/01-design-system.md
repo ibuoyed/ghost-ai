@@ -16,7 +16,7 @@ Add these shadcn components:
 
 Do not modify the generated `components/ui/*` files after installation.
 
-Also install `lucid-react`.
+Also install `lucide-react`.
 
 Create `libutils.ts` with a reusable `cn() `helper for merging tailwind classes.
 

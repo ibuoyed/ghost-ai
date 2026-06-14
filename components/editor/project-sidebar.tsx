@@ -48,7 +48,7 @@ function ProjectItem({ project }: { project: MockProject }) {
       </span>
       <span className="font-mono text-xs text-copy-muted">{project.slug}</span>
       {project.isOwn && (
-        <div className="mt-2 flex gap-1.5 opacity-0 transition-opacity group-hover:opacity-100">
+         <div className="mt-2 flex gap-1.5 transition-opacity md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100">
           <Button
             variant="ghost"
             size="sm"
