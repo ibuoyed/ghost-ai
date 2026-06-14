@@ -22,7 +22,7 @@ Requirements:
 - It should push page content and slides in from the left
 - Accepts `isOpen` prop
 - Header with` Projects` title + close button
-- Chat CN `Tabs`:
+- Shadcn `Tabs`:
     - My Projects
     - Shared
 - both tabs show empty placeholder state
@@ -43,6 +43,6 @@ Do not build actual dialogues yet.
 
 ###  Check when done
 
-- new components compile file TypeScript errors
+- new components compile without TypeScript errors
 - no lint errors
 - dialog pattern is ready for future use 
