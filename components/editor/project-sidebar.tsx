@@ -1,17 +1,81 @@
 "use client"
 
-import { Plus, X } from "lucide-react"
+import { Pencil, Plus, Trash2, X } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { cn } from "@/lib/utils"
+import type { MockProject } from "@/hooks/use-project-dialogs"
+
+import { useProjectDialogsContext } from "./project-dialogs-context"
 
 interface ProjectSidebarProps {
   isOpen: boolean
   onClose: () => void
 }
 
+const MOCK_PROJECTS: MockProject[] = [
+  {
+    id: "1",
+    name: "E-commerce Platform",
+    slug: "e-commerce-platform",
+    isOwn: true,
+  },
+  {
+    id: "2",
+    name: "Data Pipeline",
+    slug: "data-pipeline",
+    isOwn: true,
+  },
+  {
+    id: "3",
+    name: "Auth Service",
+    slug: "auth-service",
+    isOwn: false,
+  },
+]
+
+const MY_PROJECTS = MOCK_PROJECTS.filter((p) => p.isOwn)
+const SHARED_PROJECTS = MOCK_PROJECTS.filter((p) => !p.isOwn)
+
+function ProjectItem({ project }: { project: MockProject }) {
+  const { openRename, openDelete } = useProjectDialogsContext()
+
+  return (
+    <div className="group flex flex-col rounded-xl px-3 py-2 transition-colors hover:bg-subtle">
+      <span className="text-sm font-medium text-copy-primary">
+        {project.name}
+      </span>
+      <span className="font-mono text-xs text-copy-muted">{project.slug}</span>
+      {project.isOwn && (
+        <div className="mt-2 flex gap-1.5 opacity-0 transition-opacity group-hover:opacity-100">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-7 flex-1 gap-1 text-xs"
+            onClick={() => openRename(project)}
+          >
+            <Pencil className="h-3 w-3" />
+            Rename
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-7 flex-1 gap-1 text-xs text-destructive"
+            onClick={() => openDelete(project)}
+          >
+            <Trash2 className="h-3 w-3" />
+            Delete
+          </Button>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export function ProjectSidebar({ isOpen, onClose }: ProjectSidebarProps) {
+  const { openCreate } = useProjectDialogsContext()
+
   return (
     <aside
       className={cn(
@@ -39,21 +103,37 @@ export function ProjectSidebar({ isOpen, onClose }: ProjectSidebarProps) {
           </TabsList>
           <TabsContent
             value="my-projects"
-            className="flex flex-1 items-center justify-center"
+            className="mt-2 flex flex-1 flex-col gap-0.5 overflow-y-auto"
           >
-            <p className="text-sm text-copy-muted">No projects yet</p>
+            {MY_PROJECTS.length === 0 ? (
+              <div className="flex flex-1 items-center justify-center">
+                <p className="text-sm text-copy-muted">No projects yet</p>
+              </div>
+            ) : (
+              MY_PROJECTS.map((project) => (
+                <ProjectItem key={project.id} project={project} />
+              ))
+            )}
           </TabsContent>
           <TabsContent
             value="shared"
-            className="flex flex-1 items-center justify-center"
+            className="mt-2 flex flex-1 flex-col gap-0.5 overflow-y-auto"
           >
-            <p className="text-sm text-copy-muted">No shared projects</p>
+            {SHARED_PROJECTS.length === 0 ? (
+              <div className="flex flex-1 items-center justify-center">
+                <p className="text-sm text-copy-muted">No shared projects</p>
+              </div>
+            ) : (
+              SHARED_PROJECTS.map((project) => (
+                <ProjectItem key={project.id} project={project} />
+              ))
+            )}
           </TabsContent>
         </Tabs>
       </div>
 
       <div className="shrink-0 border-t border-surface-border p-3">
-        <Button variant="outline" className="w-full gap-2">
+        <Button variant="outline" className="w-full gap-2" onClick={openCreate}>
           <Plus className="h-4 w-4" />
           New Project
         </Button>
