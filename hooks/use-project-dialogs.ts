@@ -53,6 +53,7 @@ export function useProjectDialogs(): ProjectDialogsState & ProjectDialogsActions
     setDialogType(null)
     setSelectedProject(null)
     setProjectName("")
+    setIsLoading(false)
   }
 
   return {
