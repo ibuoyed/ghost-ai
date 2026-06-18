@@ -138,8 +138,14 @@ function validateUrl(rawUrl, allowLocalhost) {
 }
 
 function isLoopbackHost(hostname) {
-  const host = hostname.toLowerCase();
-  return host === "localhost" || host === "::1" || host === "[::1]" || /^127\./.test(host);
+  const host = hostname.toLowerCase().replace(/^\[|\]$/g, "");
+  return (
+    host === "localhost" ||
+    host === "::1" ||
+    host === "0.0.0.0" ||
+    /^127\./.test(host) ||
+    /^::ffff:127\./.test(host)
+  );
 }
 
 async function smokeOne(rawUrl, options) {
