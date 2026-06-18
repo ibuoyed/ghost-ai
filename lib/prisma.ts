@@ -1,7 +1,10 @@
 import { PrismaClient } from "../app/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 
-const url = process.env.DATABASE_URL ?? ""
+const url = process.env.DATABASE_URL
+if (!url) {
+  throw new Error("DATABASE_URL is required")
+}
 
 function createPrismaClient(): PrismaClient {
   if (url.startsWith("prisma+postgres://")) {
