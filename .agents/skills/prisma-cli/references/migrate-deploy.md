@@ -93,7 +93,7 @@ If a migration fails, `migrate deploy` exits with error. The failed migration is
 
 To fix:
 1. Resolve the issue (fix SQL, database state, etc.)
-2. Mark as resolved: `prisma migrate resolve --applied <migration_name>`
+2. Mark as resolved: `prisma migrate resolve --rolled-back <migration_name>`
 3. Re-run: `prisma migrate deploy`
 
 ### Check status first
