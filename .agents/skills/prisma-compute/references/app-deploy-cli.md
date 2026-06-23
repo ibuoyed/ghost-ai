@@ -159,7 +159,7 @@ bunx @prisma/cli@latest app deploy \
 After a real deploy, verify the public deployment URL. Do not stop at "deploy succeeded" or a local `app run` check:
 
 ```bash
-node prisma-compute/scripts/smoke-deployed-app.mjs https://<deployment-url>
+node .agents/skills/prisma-compute/scripts/smoke-deployed-app.mjs https://<deployment-url>
 ```
 
 If the deploy command returns JSON, parse the URL from the result and smoke-test that exact URL. Use `--expect <text>` when the app has a stable health response or page marker. The smoke script rejects `localhost` and `127.0.0.1` by default so agents do not accidentally test a local server instead of public ingress.

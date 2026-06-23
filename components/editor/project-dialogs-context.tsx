@@ -3,20 +3,20 @@
 import { createContext, useContext, type ReactNode } from "react"
 
 import {
-  useProjectDialogs,
-  type ProjectDialogsState,
-  type ProjectDialogsActions,
-} from "@/hooks/use-project-dialogs"
+  useProjectActions,
+  type ProjectActionsState,
+  type ProjectActionsHandlers,
+} from "@/hooks/use-project-actions"
 
-type ProjectDialogsContextValue = ProjectDialogsState & ProjectDialogsActions
+type ProjectDialogsContextValue = ProjectActionsState & ProjectActionsHandlers
 
 const ProjectDialogsContext = createContext<ProjectDialogsContextValue | null>(null)
 
 export function ProjectDialogsProvider({ children }: { children: ReactNode }) {
-  const dialogs = useProjectDialogs()
+  const actions = useProjectActions()
 
   return (
-    <ProjectDialogsContext.Provider value={dialogs}>
+    <ProjectDialogsContext.Provider value={actions}>
       {children}
     </ProjectDialogsContext.Provider>
   )

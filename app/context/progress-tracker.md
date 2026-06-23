@@ -4,11 +4,11 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Current Phase
 
-- Feature 05 — Prisma schema and client complete. Ready for next feature unit.
+- Feature 07 — Editor home wired to real project APIs. Sidebar and dialogs use live data.
 
 ## Current Goal
 
-- Define the next feature to implement.
+- Begin next feature.
 
 ## Completed
 
@@ -17,6 +17,8 @@ Update this file whenever the current phase, active feature, or implementation s
 - 03 Auth — ClerkProvider wraps root layout with dark theme and CSS variable overrides (no hardcoded colors). proxy.ts at root defines public routes via NEXT_PUBLIC_CLERK_SIGN_IN_URL / NEXT_PUBLIC_CLERK_SIGN_UP_URL env vars and protects everything else. Sign-in and sign-up pages use two-panel layout (left: logo + tagline + feature list; right: Clerk form; small screens: form only). Root / redirects authenticated users to /editor and unauthenticated users to /sign-in. UserButton added to EditorNavbar right section.
 - 04 Project Dialogs — editor home screen (centered heading + description + New project button). useProjectDialogs hook (dialog/form/load state). ProjectDialogsProvider (React context, no circular imports). Three dialogs: CreateProjectDialog (name input + live slug preview), RenameProjectDialog (pre-filled name, description shows current name, autofocus, Enter submits), DeleteProjectDialog (destructive confirm, no input). ProjectSidebar updated with mock projects (2 own, 1 shared), hover-reveal Rename/Delete actions (flex-1 wide, own-only), New Project button wired. Mobile backdrop scrim (z-20, md:hidden) in EditorShell closes sidebar on tap. All wirings connected via context.
 - 05 Prisma — Multi-file schema in prisma/ directory (prisma.config.ts as CLI config). prisma/models/project.prisma defines Project (ownerId, name, description?, status enum Draft/ARCHIVED, canvasJsonPath?, timestamps, indexes on ownerId and ownerId+createdAt) and ProjectCollaborator (project relation with cascade delete, email, createdAt, unique on projectId+email, indexes on email and projectId+createdAt). Generated client output at app/generated/prisma. Migration 20260615064522_init applied to Prisma Postgres. lib/prisma.ts exports a cached PrismaClient singleton: branches on DATABASE_URL prefix — prisma+postgres:// uses accelerateUrl, otherwise uses @prisma/adapter-pg.
+- 06 Project APIs — Four REST endpoints in app/api/projects/: GET /api/projects (list owner's projects, ordered by createdAt desc), POST /api/projects (create, accepts optional id for room alignment, defaults name to "Untitled Project"), PATCH /api/projects/[projectId] (rename, requires name in body), DELETE /api/projects/[projectId] (delete). All routes: 401 for unauthenticated; PATCH/DELETE enforce owner-only with 403 for non-owners.
+- 07 Wire Editor Home — Editor layout (app/editor/layout.tsx) is an async server component that fetches owned and shared projects via lib/project-data.ts and passes them as props to EditorShell. EditorShell passes project lists to ProjectSidebar (mock data removed). useProjectActions hook (hooks/use-project-actions.ts) replaces useProjectDialogs: manages dialog state and all mutations (create/rename/delete) with real fetch calls. Create generates a slug-based room ID (slug + short suffix) sent as the project id to POST /api/projects, then navigates to /editor/[id]. Rename calls PATCH and router.refresh(). Delete calls DELETE, redirects to /editor if deleting the active workspace, otherwise router.refresh(). ProjectDialogsContext updated to use useProjectActions. Dialogs wired to real handlers. NewProjectButton extracted as a client component so EditorPage (app/editor/page.tsx) is a pure server component. toSlug moved to lib/utils.ts.
 
 ## In Progress
 
@@ -24,7 +26,7 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Next Up
 
-- Add the next planned feature unit here.
+- Next feature TBD.
 
 ## Open Questions
 
@@ -44,5 +46,5 @@ Update this file whenever the current phase, active feature, or implementation s
 - globals.css is the single source of truth for all color tokens. shadcn components in components/ui/ must not be modified. Project-level overrides go in app-level components. Tailwind utility names: bg-base, bg-surface, bg-elevated, bg-subtle, text-copy-primary, text-copy-secondary, text-copy-muted, text-copy-faint, border-surface-border, text-brand, bg-brand-dim, text-ai, text-ai-text.
 - EditorDialog in components/editor/editor-dialog.tsx is the base dialog pattern. Actual dialog instances (e.g. New Project, Confirm Delete) extend it — do not modify the shadcn Dialog primitives.
 - Clerk Variables API (from @clerk/ui): colorForeground, colorMutedForeground, colorInput, colorInputForeground — not colorText, colorTextSecondary, colorInputBackground, colorInputText.
-- MockProject interface lives in hooks/use-project-dialogs.ts and is imported by the sidebar. Mock data (MOCK_PROJECTS array) lives in project-sidebar.tsx only — not in the hook. The hook holds no data, only state shape.
+- ProjectItem interface lives in hooks/use-project-actions.ts and is imported by the sidebar and editor-shell. The hook holds dialog state, computed roomSuffix, and all mutation handlers. Mock data has been removed.
 - The mobile backdrop scrim sits at z-20 in EditorShell (below sidebar z-30, below navbar z-40) and is hidden on md+ screens via md:hidden. It is rendered conditionally when sidebarOpen is true.

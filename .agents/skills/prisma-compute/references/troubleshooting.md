@@ -227,8 +227,8 @@ Symptoms:
 Check:
 
 ```bash
-node prisma-compute/scripts/smoke-deployed-app.mjs https://<deployment-url>
-node prisma-compute/scripts/smoke-deployed-app.mjs --expect "ok" https://<deployment-url>/health
+node .agents/skills/prisma-compute/scripts/smoke-deployed-app.mjs https://<deployment-url>
+node .agents/skills/prisma-compute/scripts/smoke-deployed-app.mjs --expect "ok" https://<deployment-url>/health
 bunx @prisma/cli@latest app logs --json
 ```
 

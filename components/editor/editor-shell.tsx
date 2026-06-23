@@ -2,6 +2,8 @@
 
 import { useState } from "react"
 
+import type { ProjectItem } from "@/hooks/use-project-actions"
+
 import { CreateProjectDialog } from "./create-project-dialog"
 import { DeleteProjectDialog } from "./delete-project-dialog"
 import { EditorNavbar } from "./editor-navbar"
@@ -11,9 +13,15 @@ import { RenameProjectDialog } from "./rename-project-dialog"
 
 interface EditorShellProps {
   children: React.ReactNode
+  ownedProjects: ProjectItem[]
+  sharedProjects: ProjectItem[]
 }
 
-export function EditorShell({ children }: EditorShellProps) {
+export function EditorShell({
+  children,
+  ownedProjects,
+  sharedProjects,
+}: EditorShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
@@ -26,6 +34,8 @@ export function EditorShell({ children }: EditorShellProps) {
         <ProjectSidebar
           isOpen={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
+          ownedProjects={ownedProjects}
+          sharedProjects={sharedProjects}
         />
         {sidebarOpen && (
           <div

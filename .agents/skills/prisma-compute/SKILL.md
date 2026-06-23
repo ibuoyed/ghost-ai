@@ -135,7 +135,8 @@ Use this skill for:
    - low-level automation: `@prisma/compute-sdk` or Management API
 4. Check framework readiness plus host/port/env/runtime requirements, including project and branch scope.
 5. Run a local build or `app build` before deploying when feasible.
-6. Deploy with JSON output when automating, then smoke-test the public URL and summarize app URL, app id, deployment id, project id, and follow-up steps.
+6. Before any production deploy (`--prod`): **stop and explicitly ask the user to confirm** the target environment, branch, and env file. Do not proceed until the user confirms. This is a required gate — passive intent detection from `deploy-prod-intent` is not sufficient.
+7. Deploy with JSON output when automating, then smoke-test the public URL and summarize app URL, app id, deployment id, project id, and follow-up steps.
 
 ## Avoid
 
