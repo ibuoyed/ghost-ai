@@ -15,16 +15,13 @@ export function RenameProjectDialog() {
     projectName,
     isLoading,
     setProjectName,
+    handleRename,
     close,
   } = useProjectDialogsContext()
 
-  function handleRename() {
-    close()
-  }
-
   function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter" && projectName.trim()) {
-      handleRename()
+      void handleRename()
     }
   }
 

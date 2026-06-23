@@ -2,29 +2,24 @@
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { toSlug } from "@/lib/utils"
 
 import { EditorDialog } from "./editor-dialog"
 import { useProjectDialogsContext } from "./project-dialogs-context"
 
-function toSlug(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .trim()
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-+|-+$/g, "")
-}
-
 export function CreateProjectDialog() {
-  const { dialogType, projectName, isLoading, setProjectName, close } =
-    useProjectDialogsContext()
+  const {
+    dialogType,
+    projectName,
+    roomSuffix,
+    isLoading,
+    setProjectName,
+    handleCreate,
+    close,
+  } = useProjectDialogsContext()
 
   const slug = toSlug(projectName)
-
-  function handleCreate() {
-    close()
-  }
+  const roomId = slug ? `${slug}-${roomSuffix}` : roomSuffix
 
   return (
     <EditorDialog
@@ -57,8 +52,8 @@ export function CreateProjectDialog() {
         />
         {projectName && (
           <p className="font-mono text-xs text-copy-muted">
-            slug:{" "}
-            <span className="text-copy-secondary">{slug || "—"}</span>
+            room:{" "}
+            <span className="text-copy-secondary">{roomId || "—"}</span>
           </p>
         )}
       </div>

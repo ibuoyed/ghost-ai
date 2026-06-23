@@ -2,43 +2,21 @@
 
 import { Pencil, Plus, Trash2, X } from "lucide-react"
 
+import type { ProjectItem } from "@/hooks/use-project-actions"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { cn } from "@/lib/utils"
-import type { MockProject } from "@/hooks/use-project-dialogs"
 
 import { useProjectDialogsContext } from "./project-dialogs-context"
 
 interface ProjectSidebarProps {
   isOpen: boolean
   onClose: () => void
+  ownedProjects: ProjectItem[]
+  sharedProjects: ProjectItem[]
 }
 
-const MOCK_PROJECTS: MockProject[] = [
-  {
-    id: "1",
-    name: "E-commerce Platform",
-    slug: "e-commerce-platform",
-    isOwn: true,
-  },
-  {
-    id: "2",
-    name: "Data Pipeline",
-    slug: "data-pipeline",
-    isOwn: true,
-  },
-  {
-    id: "3",
-    name: "Auth Service",
-    slug: "auth-service",
-    isOwn: false,
-  },
-]
-
-const MY_PROJECTS = MOCK_PROJECTS.filter((p) => p.isOwn)
-const SHARED_PROJECTS = MOCK_PROJECTS.filter((p) => !p.isOwn)
-
-function ProjectItem({ project }: { project: MockProject }) {
+function ProjectListItem({ project }: { project: ProjectItem }) {
   const { openRename, openDelete } = useProjectDialogsContext()
 
   return (
@@ -46,9 +24,8 @@ function ProjectItem({ project }: { project: MockProject }) {
       <span className="text-sm font-medium text-copy-primary">
         {project.name}
       </span>
-      <span className="font-mono text-xs text-copy-muted">{project.slug}</span>
       {project.isOwn && (
-         <div className="mt-2 flex gap-1.5 transition-opacity md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100">
+        <div className="mt-2 flex gap-1.5 transition-opacity md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100">
           <Button
             variant="ghost"
             size="sm"
@@ -73,7 +50,12 @@ function ProjectItem({ project }: { project: MockProject }) {
   )
 }
 
-export function ProjectSidebar({ isOpen, onClose }: ProjectSidebarProps) {
+export function ProjectSidebar({
+  isOpen,
+  onClose,
+  ownedProjects,
+  sharedProjects,
+}: ProjectSidebarProps) {
   const { openCreate } = useProjectDialogsContext()
 
   return (
@@ -105,13 +87,13 @@ export function ProjectSidebar({ isOpen, onClose }: ProjectSidebarProps) {
             value="my-projects"
             className="mt-2 flex flex-1 flex-col gap-0.5 overflow-y-auto"
           >
-            {MY_PROJECTS.length === 0 ? (
+            {ownedProjects.length === 0 ? (
               <div className="flex flex-1 items-center justify-center">
                 <p className="text-sm text-copy-muted">No projects yet</p>
               </div>
             ) : (
-              MY_PROJECTS.map((project) => (
-                <ProjectItem key={project.id} project={project} />
+              ownedProjects.map((project) => (
+                <ProjectListItem key={project.id} project={project} />
               ))
             )}
           </TabsContent>
@@ -119,13 +101,13 @@ export function ProjectSidebar({ isOpen, onClose }: ProjectSidebarProps) {
             value="shared"
             className="mt-2 flex flex-1 flex-col gap-0.5 overflow-y-auto"
           >
-            {SHARED_PROJECTS.length === 0 ? (
+            {sharedProjects.length === 0 ? (
               <div className="flex flex-1 items-center justify-center">
                 <p className="text-sm text-copy-muted">No shared projects</p>
               </div>
             ) : (
-              SHARED_PROJECTS.map((project) => (
-                <ProjectItem key={project.id} project={project} />
+              sharedProjects.map((project) => (
+                <ProjectListItem key={project.id} project={project} />
               ))
             )}
           </TabsContent>

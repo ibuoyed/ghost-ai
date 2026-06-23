@@ -6,12 +6,8 @@ import { EditorDialog } from "./editor-dialog"
 import { useProjectDialogsContext } from "./project-dialogs-context"
 
 export function DeleteProjectDialog() {
-  const { dialogType, selectedProject, isLoading, close } =
+  const { dialogType, selectedProject, isLoading, handleDelete, close } =
     useProjectDialogsContext()
-
-  function handleDelete() {
-    close()
-  }
 
   return (
     <EditorDialog
